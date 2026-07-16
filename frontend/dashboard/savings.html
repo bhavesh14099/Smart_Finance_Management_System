@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<!-- savings.html — inject into #savingsTab via server include or fetch -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartFinance — Savings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --p: #4338CA;
+      --pl: #6366F1;
+      --pg: rgba(67, 56, 202, 0.10);
+      --ac: #06B6D4;
+      --ok: #10B981;
+      --wn: #F59E0B;
+      --er: #EF4444;
+      --bg: #F0F4FF;
+      --sf: #FFFFFF;
+      --s2: #F5F7FF;
+      --bd: #E2E8F8;
+      --t1: #0D1535;
+      --t2: #435085;
+      --t3: #8894C2;
+      --r: 18px;
+      --r2: 11px;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--t1);
+      padding: 24px;
+    }
+
+    .phdrr {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .phdr h1 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .phdr p {
+      font-size: 13px;
+      color: var(--t3);
+      margin-top: 3px;
+    }
+
+    .card {
+      background: var(--sf);
+      border: 1px solid var(--bd);
+      border-radius: var(--r);
+      padding: 22px;
+    }
+
+    .chdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .ctitle {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .ctag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 11px;
+      border-radius: 30px;
+      background: var(--pg);
+      color: var(--p);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 11px 20px;
+      border-radius: var(--r2);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.15s;
+      font-family: inherit;
+      border: none;
+    }
+
+    .bs {
+      background: var(--s2);
+      border: 1.5px solid var(--bd);
+      color: var(--t1);
+    }
+
+    .bs:hover {
+      border-color: var(--p);
+      color: var(--p);
+    }
+
+    .bsm {
+      padding: 9px 16px;
+      font-size: 12.5px;
+      width: auto !important;
+    }
+
+    .ibox {
+      display: flex;
+      gap: 10px;
+      padding: 13px 15px;
+      background: rgba(67, 56, 202, 0.05);
+      border: 1px solid rgba(67, 56, 202, 0.12);
+      border-radius: var(--r2);
+      font-size: 13px;
+      color: var(--t2);
+      line-height: 1.6;
+    }
+
+    .shimmer {
+      background: linear-gradient(90deg, var(--s2) 25%, var(--bd) 50%, var(--s2) 75%);
+      background-size: 200% 100%;
+      animation: shim 1.5s infinite;
+    }
+
+    @keyframes shim {
+      0% {
+        background-position: 200% 0;
+      }
+      100% {
+        background-position: -200% 0;
+      }
+    }
+
+    .empty {
+      padding: 36px;
+      text-align: center;
+      color: var(--t3);
+      font-size: 13px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 640px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Saving tiles */
+    .stiles3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .stiles2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .stile {
+      padding: 16px;
+      background: var(--s2);
+      border-radius: var(--r2);
+    }
+
+    .stlbl {
+      font-size: 11px;
+      color: var(--t3);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 6px;
+    }
+
+    .stval {
+      font-size: 22px;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--ok);
+    }
+
+    /* Investment */
+    .inv-readiness {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: var(--r2);
+      margin-bottom: 14px;
+    }
+
+    .inv-readiness.stable {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .inv-readiness.cautious {
+      background: rgba(245, 158, 11, 0.07);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+
+    .inv-readiness.needs_improvement {
+      background: rgba(239, 68, 68, 0.06);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .inv-ri-ico {
+      font-size: 28px;
+    }
+
+    .inv-ri-label {
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 2px;
+    }
+
+    .inv-ri-desc {
+      font-size: 12px;
+      color: var(--t2);
+    }
+
+    .inv-risk-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 13px;
+      border-radius: 30px;
+      font-weight: 700;
+      background: var(--pg);
+      color: var(--p);
+    }
+
+
+    .inv-opts-lbl {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--t3);
+      margin-bottom: 10px;
+    }
+
+    .inv-opt {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      background: var(--sf);
+      border: 1px solid var(--bd);
+      border-radius: var(--r2);
+      margin-bottom: 8px;
+    }
+
+    .inv-opt:last-child {
+      margin-bottom: 0;
+    }
+
+    .inv-opt-ico {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      background: var(--pg);
+      flex-shrink: 0;
+    }
+
+    .inv-opt-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--t1);
+    }
+
+    .inv-opt-type {
+      font-size: 11px;
+      color: var(--t3);
+    }
+  </style>
+</head>
+<body>
+
+<div id="_savingsContent">
+
+  <div class="phdrr">
+    <div class="phdr">
+      <h1>Savings &amp; Investment</h1>
+      <p>Calculated for this month · auto-updated</p>
+    </div>
+    <button class="btn bs bsm" onclick="autoSavings()">🔄 Refresh</button>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="chdr">
+        <span class="ctitle">💰 Savings Potential</span>
+        <span class="ctag">This Month</span>
+      </div>
+      <div id="savPot">
+        <div class="shimmer" style="height:140px;border-radius:var(--r2)"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="chdr">
+        <span class="ctitle">📈 Investment Suggestions</span>
+        <span class="ctag">Rule-Based</span>
+      </div>
+      <div id="invDisp">
+        <div class="shimmer" style="height:140px;border-radius:var(--r2)"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /#_savingsContent -->
+
+<script>
+  (function() {
+    const target = document.getElementById('savingsTab');
+    const content = document.getElementById('_savingsContent');
+    if (target && content) {
+      target.innerHTML = ''; 
+      target.appendChild(content);
+    }
+    const ml = document.getElementById('savMonthLabel');
+    if (ml) ml.textContent = new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
+  })();
+
+  // =====================================================================
+  //  SAVINGS & INVESTMENT DATA
+  // =====================================================================
+  {
+    const INV_ICONS = {
+      'Savings Account': '🏦',
+      'Government Bonds': '📜',
+      'Fixed Deposits': '🔒',
+      'Low-risk Mutual Funds': '🛡️',
+      'Balanced Mutual Funds': '⚖️',
+      'Index Funds': '📈',
+      'Stocks': '📊',
+      'ETFs': '🌐',
+      'High-risk Mutual Funds': '🚀'
+    };
+    const INV_TYPE = {
+      'Savings Account': 'Low Risk · Liquid',
+      'Government Bonds': 'Very Low Risk · 5-10yr',
+      'Fixed Deposits': 'Low Risk · Guaranteed',
+      'Low-risk Mutual Funds': 'Low Risk · Diversified',
+      'Balanced Mutual Funds': 'Medium Risk · Mixed',
+      'Index Funds': 'Medium Risk · Market-linked',
+      'Stocks': 'High Risk · Market-linked',
+      'ETFs': 'High Risk · Diversified',
+      'High-risk Mutual Funds': 'High Risk · Growth'
+    };
+    const READINESS_INFO = {
+      stable: {
+        ico: '🟢',
+        label: 'Investment Ready',
+        desc: 'Your savings rate is strong — a great time to invest.'
+      },
+      cautious: {
+        ico: '🟡',
+        label: 'Proceed Carefully',
+        desc: 'You have some capacity to invest, but building stronger savings will improve stability.'
+      },
+      needs_improvement: {
+        ico: '🟠',
+        label: 'Build Savings First',
+        desc: 'Your current savings level is limited. Focus on reducing discretionary spending and increasing savings before investing.'
+      },
+
+      not_ready: {
+        ico: '🔴',
+        label: 'Focus on Savings First',
+        desc: 'Your savings capacity is currently too low for safe investing. Prioritize stabilizing finances and building an emergency buffer.'
+      }
+    };
+    const RISK_LABELS = {
+      'very conservative': 'Very Conservative',
+      conservative: 'Conservative',
+      cautious: 'Cautious',
+      moderate: 'Moderate',
+      aggressive: 'Aggressive'
+    };
+
+    window.autoSavings = async function () {
+      if (typeof pType === 'undefined' || pType !== 'user') return;
+      const fd = new FormData();
+      fd.append('user_id', userId);
+      fd.append('start_date', fom());
+      fd.append('end_date', today());
+      const savEl = document.getElementById('savPot');
+      const invEl = document.getElementById('invDisp');
+      try {
+        const d = await (await fetch(`${API}/savings/estimate`, { method: 'POST', body: fd })).json();
+        const pct    = d.savings_potential_percentage || d.savings_percentage || 0;
+        const health = d.financial_health || "Unknown";
+        const score  = d.savings_score || 0;
+        const nec    = d.reducible_breakdown?.necessary     || 0;
+        const dis    = d.reducible_breakdown?.discretionary || 0;
+        const total  = nec + dis || 1;
+        const necW   = Math.round((nec / total) * 100);
+        const disW   = Math.round((dis / total) * 100);
+
+        let pctLbl = "⚪ Unknown";
+        let pctCol = "#8894C2";
+
+        if (health === "Excellent") { pctLbl = "🟢 Excellent"; pctCol = "#10B981"; }
+        else if (health === "Good") { pctLbl = "🟡 Good";      pctCol = "#F59E0B"; }
+        else if (health === "Weak") { pctLbl = "🟠 Weak";      pctCol = "#F97316"; }
+        else if (health === "Poor") { pctLbl = "🔴 Poor";      pctCol = "#EF4444"; }
+
+        if (savEl) savEl.innerHTML = `
+
+          <!-- 3 metric tiles: income / can save / savings rate -->
+          <div class="stiles3">
+            <div class="stile">
+              <div class="stlbl">💼 Monthly Income</div>
+              <div class="stval" style="color:var(--t1)">₹${(d.income || 0).toFixed(0)}</div>
+            </div>
+            <div class="stile">
+              <div class="stlbl">💰 You Can Save</div>
+              <div class="stval" style="color:${pctCol}">₹${(d.estimated_savings_potential || 0).toFixed(0)}</div>
+            </div>
+            <div class="stile">
+              <div class="stlbl">📊 Savings Rate</div>
+              <div class="stval" style="color:${pctCol}">${pct.toFixed(1)}%</div>
+            </div>
+          </div>
+
+          <!-- Reducible expenses with mini progress bars -->
+          <div class="stile" style="border:1.5px solid var(--bd);margin-bottom:14px">
+            <div class="stlbl" style="margin-bottom:12px">📦 Reducible Expenses</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div>
+                <div class="stlbl" style="color:#EA580C">🟠 Necessary (−25%)</div>
+                <div class="stval" style="font-size:18px;color:#F97316">₹${nec.toFixed(0)}</div>
+                <div style="margin-top:8px;height:4px;border-radius:4px;background:var(--bd);overflow:hidden">
+                  <div style="height:100%;width:${necW}%;background:#F97316;border-radius:4px"></div>
+                </div>
+              </div>
+              <div>
+                <div class="stlbl" style="color:#CA8A04">🟡 Discretionary (−60%)</div>
+                <div class="stval" style="font-size:18px;color:#EAB308">₹${dis.toFixed(0)}</div>
+                <div style="margin-top:8px;height:4px;border-radius:4px;background:var(--bd);overflow:hidden">
+                  <div style="height:100%;width:${disW}%;background:#84CC16;border-radius:4px"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Savings score + financial health banner -->
+          <div style="display:flex;align-items:center;gap:12px;padding:13px 15px;
+                      background:${pctCol}18;border-radius:var(--r2);
+                      border:1.5px solid ${pctCol}35">
+            <div style="width:40px;height:40px;border-radius:50%;
+                        background:${pctCol}30;display:flex;align-items:center;
+                        justify-content:center;font-size:20px;flex-shrink:0">
+              ${pctLbl.split(' ')[0]}
+            </div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13px;font-weight:800;color:${pctCol}">
+                Financial Health: ${health}
+              </div>
+              <div style="font-size:11.5px;color:var(--t2);margin-top:3px">
+                Current Savings score · ${score.toFixed(1)} / 100
+              </div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div style="font-size:22px;font-weight:800;
+                          font-family:'JetBrains Mono',monospace;
+                          line-height:1;color:${pctCol}">${score.toFixed(1)}</div>
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;
+                          letter-spacing:0.3px;color:var(--t3)">score</div>
+            </div>
+          </div>`;
+
+        // Now fetch investment suggestions
+        try {
+          const id = await (await fetch(`${API}/investments/`, { method: 'POST', body: fd })).json();
+          const ri = READINESS_INFO[id.investment_readiness] || READINESS_INFO.cautious;
+          const rlbl = RISK_LABELS[id.risk_profile] || id.risk_profile;
+          const suggestedAmt = id.suggested_investment_amount || 0;
+          if (invEl) invEl.innerHTML = `
+            <div class="inv-readiness ${id.investment_readiness}">
+              <div class="inv-ri-ico">${ri.ico}</div>
+              <div><div class="inv-ri-label">${ri.label}</div><div class="inv-ri-desc">${ri.desc}</div></div>
+            </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;
+                          gap:10px;margin-bottom:8px;flex-wrap:wrap;">
+                <div class="inv-risk-badge" style="font-size:13px; letter-spacing:0.3px;  margin-top:4px;">⚖️ Investor Profile: ${rlbl}</div>
+                ${suggestedAmt > 0 ? `
+                <div style="display:flex;align-items:center;gap:7px;
+                            padding:5px 13px;border-radius:30px;
+                            background:rgba(16,185,129,0.10);
+                            border:1.5px solid rgba(16,185,129,0.28);">
+                  <span style="font-size:11px;font-weight:700;color:var(--t3);
+                              text-transform:uppercase;letter-spacing:0.4px">💸 You can Invest</span>
+                  <span style="font-size:15px;font-weight:800;
+                              font-family:'JetBrains Mono',monospace;
+                              color:var(--ok)">₹${suggestedAmt.toFixed(0)}</span>
+                </div>` : ''}
+              </div>
+
+            <div class="inv-opts-lbl">Recommended for you</div>
+            ${(id.recommended_options || []).map(o => `
+              <div class="inv-opt">
+                <div class="inv-opt-ico">${INV_ICONS[o] || '💼'}</div>
+                <div><div class="inv-opt-name">${o}</div><div class="inv-opt-type">${INV_TYPE[o] || 'Investment option'}</div></div>
+              </div>`).join('')}
+            `;
+        } catch (e) {
+          if (invEl) invEl.innerHTML = '<div class="empty">Investment suggestions load once savings data is available</div>';
+        }
+      } catch (e) {
+        if (savEl) savEl.innerHTML = '<div class="empty">Savings data appears once transactions exist</div>';
+        if (invEl) invEl.innerHTML = '<div class="empty">Investment suggestions load once savings data is available</div>';
+      }
+    }
+  }
+</script>
+</body>
+</html>

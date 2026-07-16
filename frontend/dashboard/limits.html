@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<!-- limits.html — inject into #limitsTab via server include or fetch -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartFinance — Limits</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --p: #4338CA;
+      --pl: #6366F1;
+      --pg: rgba(67, 56, 202, 0.10);
+      --ok: #10B981;
+      --er: #EF4444;
+      --wn: #F59E0B;
+      --bg: #F0F4FF;
+      --sf: #FFFFFF;
+      --s2: #F5F7FF;
+      --bd: #E2E8F8;
+      --t1: #0D1535;
+      --t2: #435085;
+      --t3: #8894C2;
+      --r: 18px;
+      --r2: 11px;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--t1);
+      padding: 24px;
+    }
+
+    .phdrr {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .phdr h1 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .phdr p {
+      font-size: 13px;
+      color: var(--t3);
+      margin-top: 3px;
+    }
+
+    .card {
+      background: var(--sf);
+      border: 1px solid var(--bd);
+      border-radius: var(--r);
+      padding: 22px;
+    }
+
+    .chdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .ctitle {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .ctag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 11px;
+      border-radius: 30px;
+      background: var(--pg);
+      color: var(--p);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 11px 20px;
+      border-radius: var(--r2);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.15s;
+      font-family: inherit;
+      border: none;
+    }
+
+    .bp {
+      background: var(--p);
+      color: #fff;
+    }
+
+    .bp:hover {
+      background: #3730A3;
+    }
+
+    .bp:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .bsm {
+      padding: 9px 16px;
+      font-size: 12.5px;
+      width: auto !important;
+    }
+
+    .ibox {
+      display: flex;
+      gap: 10px;
+      padding: 13px 15px;
+      background: rgba(67, 56, 202, 0.05);
+      border: 1px solid rgba(67, 56, 202, 0.12);
+      border-radius: var(--r2);
+      font-size: 13px;
+      color: var(--t2);
+      line-height: 1.6;
+    }
+
+    .shimmer {
+      background: linear-gradient(90deg, var(--s2) 25%, var(--bd) 50%, var(--s2) 75%);
+      background-size: 200% 100%;
+      animation: shim 1.5s infinite;
+    }
+
+    @keyframes shim {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .empty {
+      padding: 36px;
+      text-align: center;
+      color: var(--t3);
+      font-size: 13px;
+    }
+
+    .ei {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .ait {
+      display: flex;
+      gap: 12px;
+      padding: 13px 15px;
+      border-radius: var(--r2);
+      margin-bottom: 10px;
+      border-left: 4px solid;
+    }
+
+    .ait.w {
+      background: rgba(245, 158, 11, 0.05);
+      border-color: var(--wn);
+    }
+
+    .ait.d {
+      background: rgba(239, 68, 68, 0.05);
+      border-color: var(--er);
+    }
+
+    .attl {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .amsg {
+      font-size: 12px;
+      color: var(--t2);
+    }
+
+    /* Summary stat cards */
+    .sc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 640px) {
+      .sc-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .sc {
+      background: var(--sf);
+      border: 1px solid var(--bd);
+      border-radius: var(--r);
+      padding: 20px;
+    }
+
+    .sc-tp {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .sc-ico {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--r2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .ic-g {
+      background: rgba(16, 185, 129, 0.12);
+    }
+
+    .ic-r {
+      background: rgba(239, 68, 68, 0.08);
+    }
+
+    .ic-y {
+      background: rgba(245, 158, 11, 0.12);
+    }
+
+    .sbadge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 30px;
+    }
+
+    .sb-up {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--ok);
+    }
+
+    .sb-dn {
+      background: rgba(239, 68, 68, 0.08);
+      color: var(--er);
+    }
+
+    .sb-nu {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--wn);
+    }
+
+    .sval {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .slbl {
+      font-size: 11px;
+      color: var(--t3);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    /* Limit bars */
+    .lim {
+      padding: 16px;
+      background: var(--s2);
+      border-radius: var(--r2);
+      margin-bottom: 10px;
+      border: 1px solid var(--bd);
+    }
+
+    .lim:last-child {
+      margin-bottom: 0;
+    }
+
+    .lhdr {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .lcat {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .lpct {
+      font-size: 13px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 30px;
+    }
+
+    .lpct.safe {
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--ok);
+    }
+
+    .lpct.warn {
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--wn);
+    }
+
+    .lpct.danger {
+      background: rgba(239, 68, 68, 0.10);
+      color: var(--er);
+    }
+
+    .lbar {
+      height: 10px;
+      background: var(--bd);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .lfill {
+      height: 100%;
+      border-radius: 6px;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .lnums {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--t3);
+      font-weight: 600;
+    }
+
+    /* Spinner for regenerate button */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spin-icon { display: inline-block; animation: spin 0.8s linear infinite; }
+  </style>
+</head>
+<body>
+
+<div id="_limitsContent">
+
+  <div class="phdrr">
+    <div class="phdr">
+      <h1>Spend Limits</h1>
+      <p>AI-managed budgets · calculated for this month only</p>
+    </div>
+    <button class="btn bp bsm" id="regenBtn" onclick="genLimits()">⚙ Regenerate</button>
+  </div>
+
+  <div class="ibox" style="margin-bottom:16px;align-items:center">
+    📅
+    <div>Showing limits for <strong id="limMonthLabel">this month</strong>. Ratios = actual spending ÷ AI-generated limit.</div>
+  </div>
+
+  <!-- Summary -->
+  <div class="sc-grid">
+    <div class="sc">
+      <div class="sc-tp">
+        <div class="sc-ico ic-g">✅</div>
+        <span class="sbadge sb-up">safe</span>
+      </div>
+      <div class="sval" id="limSafe" style="font-size:22px">0</div>
+      <div class="slbl">Within Budget</div>
+    </div>
+    <div class="sc">
+      <div class="sc-tp">
+        <div class="sc-ico ic-y">⚠️</div>
+        <span class="sbadge sb-nu">caution</span>
+      </div>
+      <div class="sval" id="limWarn" style="font-size:22px;color:var(--wn)">0</div>
+      <div class="slbl">Near Limit (70–90%)</div>
+    </div>
+    <div class="sc">
+      <div class="sc-tp">
+        <div class="sc-ico ic-r">🚨</div>
+        <span class="sbadge sb-dn">danger</span>
+      </div>
+      <div class="sval" id="limDang" style="font-size:22px;color:var(--er)">0</div>
+      <div class="slbl">Over / Critical</div>
+    </div>
+  </div>
+
+  <!-- Limit bars -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="chdr">
+      <span class="ctitle">Category Limits</span>
+      <span class="ctag" id="limTag">Loading…</span>
+    </div>
+    <div id="limDisp">
+      <div class="shimmer" style="height:100px;border-radius:var(--r2)"></div>
+    </div>
+  </div>
+
+  <!-- Alerts -->
+  <div class="card">
+    <div class="chdr">
+      <span class="ctitle">🔔 Limit Alerts</span>
+      <span class="ctag" id="limAlertCnt" style="background:rgba(239,68,68,0.1);color:var(--er)">0 alerts</span>
+    </div>
+    <div style="font-size:12px;color:var(--t3);margin-bottom:12px">Only showing alerts triggered by this month's spending</div>
+    <div id="limAlerts">
+      <div class="empty">No alerts this month</div>
+    </div>
+  </div>
+
+</div><!-- /#_limitsContent -->
+
+<script>
+  (function() {
+    const target = document.getElementById('limitsTab');
+    if (target) target.appendChild(document.getElementById('_limitsContent'));
+
+    // Set month label
+    const ml = document.getElementById('limMonthLabel');
+    if (ml) ml.textContent = new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
+  })();
+
+  (function initLimitsTab() {
+    // If rendered standalone (dev/preview), auto-run immediately
+    if (!document.getElementById('limitsTab')) {
+      autoLimits();
+      return;
+    }
+
+    // Pattern A: listen for a custom event dispatched by the tab switcher
+    document.addEventListener('tabChanged', function(e) {
+      if (e.detail && e.detail.tab === 'limits') autoLimits();
+    });
+
+    // Pattern B: observe tab button clicks (data-tab="limits" or id="limitsTabBtn")
+    document.querySelectorAll('[data-tab="limits"], #limitsTabBtn').forEach(btn => {
+      btn.addEventListener('click', autoLimits);
+    });
+
+    // Pattern C: MutationObserver — fires when #limitsTab becomes visible
+    //   (handles display:none → display:block or class toggling)
+    const limTab = document.getElementById('limitsTab');
+    if (limTab) {
+      let wasHidden = limTab.offsetParent === null; // true if currently hidden
+      const obs = new MutationObserver(() => {
+        const isHidden = limTab.offsetParent === null;
+        if (wasHidden && !isHidden) {
+          // Tab just became visible → auto-load
+          autoLimits();
+        }
+        wasHidden = isHidden;
+      });
+      obs.observe(limTab, { attributes: true, attributeFilter: ['class', 'style', 'hidden'] });
+
+      // If tab is already visible on page load, run immediately
+      if (!wasHidden) autoLimits();
+    }
+  })();
+
+  // =====================================================================
+  //  LIMITS DATA
+  // =====================================================================
+  let _limitsLoading = false; // guard against double-calls
+
+  async function autoLimits(forceGenerate = false) {
+    if (_limitsLoading) return;
+    _limitsLoading = true;
+    setRegenBtnLoading(true);
+
+    try {
+      // 1. Fetch current spending + alerts in parallel (always needed)
+      // 2. Try GET limits first; fall back to POST generate if forceGenerate or 404
+      const spendPromise  = fetch(`${API}/spend/current-spending/${userId}`);
+      const alertsPromise = fetch(`${API}/spend/alerts/${userId}`);
+
+      // ── GET existing limits (avoids re-generating on every tab open) ──
+      let limRes;
+      if (forceGenerate) {
+        limRes = await fetch(`${API}/spend/generate/${userId}`, { method: 'POST' });
+      } else {
+        // Try GET first; many backends expose /limits/:userId for cached limits
+        limRes = await fetch(`${API}/spend/limits/${userId}`);
+        if (!limRes.ok) {
+          // No cached limits → auto-generate silently on first visit
+          limRes = await fetch(`${API}/spend/generate/${userId}`, { method: 'POST' });
+        }
+      }
+
+      const [spendRes, alertsRes] = await Promise.all([spendPromise, alertsPromise]);
+
+      const limData    = await limRes.json();
+      const spendData  = await spendRes.json();
+      const alertsData = await alertsRes.json();
+
+      // ── Limit bars ──────────────────────────────────────────────────
+      if (!limData.limits) {
+        const el = document.getElementById('limDisp');
+        if (el) el.innerHTML = `
+          <div class="empty">
+            <div class="ei">⚠️</div>
+            ${limData.detail || 'Could not load limits. Please update your income and savings goal first.'}
+            <br><br>
+            <button class="btn bp bsm" onclick="genLimits()">Generate Now</button>
+          </div>`;
+        const lt = document.getElementById('limTag');
+        if (lt) lt.textContent = '0 categories';
+        renderAlerts(alertsData.alerts || []);
+        return;
+      }
+
+      window.currentLimitsData  = limData.limits;
+      window.currentLimSpending = spendData.spending || {};
+
+      const lt = document.getElementById('limTag');
+      if (lt) lt.textContent = `${limData.limits.length} categories`;
+
+      renderLimits(limData.limits, window.currentLimSpending);
+      renderAlerts(alertsData.alerts || []);
+
+    } catch (e) {
+      console.error('Limits error:', e);
+      const el = document.getElementById('limDisp');
+      if (el) el.innerHTML = `<div class="empty"><div class="ei">❌</div>Failed to load limits. Check your connection and try again.</div>`;
+    } finally {
+      _limitsLoading = false;
+      setRegenBtnLoading(false);
+    }
+  }
+
+  // "Regenerate" button → force a fresh POST to /generate
+  async function genLimits() {
+    const el = document.getElementById('limDisp');
+    if (el) el.innerHTML = '<div class="shimmer" style="height:100px;border-radius:var(--r2)"></div>';
+    await autoLimits(true); // forceGenerate = true
+  }
+
+  // ── Alerts renderer (extracted so both paths can call it) ──────────
+  function renderAlerts(alerts) {
+    const alertHtml = alerts.length
+      ? alerts.map(a => `
+          <div class="ait ${a.type === 'danger' ? 'd' : 'w'}">
+            <span style="font-size:16px">${a.type === 'danger' ? '🚨' : '⚠️'}</span>
+            <div>
+              <div class="attl">${a.category || 'Alert'}</div>
+              <div class="amsg">${a.message}</div>
+            </div>
+          </div>`).join('')
+      : '<div class="empty"><div class="ei">✅</div>No alerts this month</div>';
+
+    const limAlerts = document.getElementById('limAlerts');
+    if (limAlerts) limAlerts.innerHTML = alertHtml;
+
+    const lac = document.getElementById('limAlertCnt');
+    if (lac) lac.textContent = `${alerts.length} alert${alerts.length !== 1 ? 's' : ''}`;
+
+    // Sync overview alert list if present
+    const alertList = document.getElementById('alertList');
+    if (alertList && alerts.length) alertList.innerHTML = alertHtml;
+
+    const ac = document.getElementById('alertCnt');
+    if (ac && alerts.length) ac.textContent = `${alerts.length} active`;
+  }
+
+  // ── Regenerate button loading state ───────────────────────────────
+  function setRegenBtnLoading(loading) {
+    const btn = document.getElementById('regenBtn');
+    if (!btn) return;
+    btn.disabled = loading;
+    btn.innerHTML = loading
+      ? '<span class="spin-icon">⚙</span> Loading…'
+      : '⚙ Regenerate';
+  }
+
+  // ── Limit bars renderer ────────────────────────────────────────────
+  function renderLimits(limits, catSpending) {
+    const el = document.getElementById('limDisp');
+    if (!el) return;
+    let safe = 0, warn = 0, danger = 0;
+
+    // Normalize spending keys: lowercase + trim
+    const norm = {};
+    Object.keys(catSpending).forEach(k => {
+      norm[k.toLowerCase().trim()] = parseFloat(catSpending[k]) || 0;
+    });
+
+    // Fuzzy lookup: exact → then contains match in either direction
+    function getSpent(category) {
+      const k = category.toLowerCase().trim();
+      if (norm[k] !== undefined) return norm[k];
+      // Try partial match: spending key contains limit key, or vice versa
+      for (const [sk, sv] of Object.entries(norm)) {
+        if (sk.includes(k) || k.includes(sk)) return sv;
+      }
+      return 0;
+    }
+
+    // Total Monthly Spend = sum of all category spending
+    const totalSpent = Object.values(norm).reduce((a, b) => a + b, 0);
+
+    const html = limits.map(l => {
+      const isTotal = l.category.toLowerCase().trim() === 'total monthly spend';
+      const spent   = isTotal ? totalSpent : getSpent(l.category);
+      const lmt     = parseFloat(l.limit);
+      const pct     = lmt > 0 ? (spent / lmt) * 100 : 0;
+      const disp    = Math.min(100, pct);
+      const rem     = lmt - spent;
+
+      let cls, color;
+      if (pct >= 100)    { cls = 'danger'; color = '#EF4444'; danger++; }
+      else if (pct > 70) { cls = 'warn';   color = '#F59E0B'; warn++;   }
+      else               { cls = 'safe';   color = '#10B981'; safe++;   }
+
+      return `
+        <div class="lim">
+          <div class="lhdr">
+            <span class="lcat">${l.category}</span>
+            <span class="lpct ${cls}">${pct.toFixed(0)}% used</span>
+          </div>
+          <div class="lbar"><div class="lfill" style="width:${disp}%;background:${color}"></div></div>
+          <div class="lnums">
+            <span>₹${spent.toFixed(0)} spent of ₹${lmt.toFixed(0)}</span>
+            <span style="color:${rem >= 0 ? 'var(--ok)' : 'var(--er)'}">
+              ${rem >= 0 ? `₹${rem.toFixed(0)} left` : `₹${Math.abs(rem).toFixed(0)} over`}
+            </span>
+          </div>
+        </div>`;
+    }).join('');
+
+    el.innerHTML = html || '<div class="empty">No limit data available</div>';
+    ['limSafe', 'limWarn', 'limDang'].forEach((id, i) => {
+      const e = document.getElementById(id);
+      if (e) e.textContent = [safe, warn, danger][i];
+    });
+  }
+</script>
+</body>
+</html>
